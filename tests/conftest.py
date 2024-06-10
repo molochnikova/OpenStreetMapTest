@@ -3,11 +3,14 @@ import requests
 
 
 class ApiClient:
+    """
+    Преобразование полученного адреса или координат в нужный формат url
+    """
     def __init__(self, base_address):
         self.base_address = base_address
 
     def get_search(self, q):
-        url = f"{self.base_address}q={q}&format=json"
+        url = f"{self.base_address}q={q}&format=json&addressdetails=1&limit=1"
         return requests.get(url)
 
     def get_reverse(self, lat, lon):
@@ -23,3 +26,5 @@ def get_api_search():
 @pytest.fixture
 def get_api_reverse():
     return ApiClient(base_address="https://nominatim.openstreetmap.org/reverse?")
+
+

@@ -1,0 +1,26 @@
+[
+    {
+        "q": "14%2C+Bradford+Road%2C+Upper+Pells%2C+Lewes%2C+East+Sussex%2C+England%2C+BN7+1RB%2C+United+Kingdom",
+        "address": "14, Bradford Road, Upper Pells, Lewes, East Sussex, England, BN7 1RB, United Kingdom",
+        "lat": "50.8741261",
+        "lon": "0.0006877111111111112"
+    },
+    {
+        "q": "14%2C+Bradford+Road%2C+Upper+Pells%2C+Lewes%2C+East+Sussex%2C+England%2C+BN7+1RB%2C+United+Kingdom",
+        "address": "14, Bradford Road, Upper Pells, Lewes, East Sussex, England, BN7 1RB, United Kingdom",
+        "lat": "",
+        "lon": "0.0006877111111111112"
+    },
+    {
+        "q": "14%2C+Bradford+Road%2C+Upper+Pells%2C+Lewes%2C+East+Sussex%2C+England%2C+BN7+1RB%2C+United+Kingdom",
+        "address": "14, Bradford Road, Upper Pells, Lewes, East Sussex, England, BN7 1RB, United Kingdom",
+        "lat": "0.0",
+        "lon": ""
+    },
+    {
+        "q": "14%2C+Bradford+Road%2C+Upper+Pells%2C+Lewes%2C+East+Sussex%2C+England%2C+BN7+1RB%2C+United+Kingdom",
+        "address": "14, Bradford Road, Upper Pells, Lewes, East Sussex, England, BN7 1RB, United Kingdom",
+        "lat": "",
+        "lon": ""
+    }
+]
