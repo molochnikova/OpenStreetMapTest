@@ -5,18 +5,6 @@ import logging
 from requests.exceptions import HTTPError
 import allure
 
-logger = logging.getLogger('py_log.log')
-logger.setLevel(logging.INFO)
-
-# настройка обработчика и форматировщика для logger
-handler = logging.FileHandler('py_log.log', mode='w')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s')
-    #"%(name)s %(asctime)s %(levelname)s %(message)s")
-
-# добавление форматировщика к обработчику
-handler.setFormatter(formatter)
-# добавление обработчика к логгеру
-logger.addHandler(handler)
 
 @allure.feature('Получение координат')
 @allure.story('Проверка всякая такая разная')
@@ -33,18 +21,22 @@ def test_chek_address(index, get_api_search):
         try:
             for _ in range(3):
                 response.raise_for_status()       # если ответ успешен, исключения задействованы не будут
+                logging.info(f'[{response.status_code}] - веб-сервер успешно обработал запрос')
         except HTTPError as http_err:
-            logger.warning (f'HTTP error occurred: {http_err}')
+            logging.warning (f'HTTP error occurred: {http_err}')
     with open('values_search.json') as file:
         search_dict = json.load(file)
         logging.info(f'Получение данных для тестирования в формате json {search_dict}')
-    with allure.step("Запрос отправлен. Десериализируем ответ из json в словарь."):
+    with allure.step("Прочитаем полученный JSON и преобразуем его в объект стандартного типа данных Python"):
         response = response.text
         test_json = GetCordAddress(response)
-    with allure.step(f"Посмотрим какие координаты получены из {test_json}"):
+    with allure.step(f"Получим координаты:"):
         coord = test_json.get_coord()
-    with allure.step(f"Проверим полченные данные:"):
-        assert coord[0] == search_dict[index]['lat'] and coord[1] == search_dict[index]['lon'], logger.warning(f'Полученные данные не верны')
+        logging.info(f'Из обработанного ответа были получены координаты: {coord.text}')
+    with allure.step(f"Проверим полученные данные:"):
+        assert coord[0] == search_dict[index]['lat'] and coord[1] == search_dict[index]['lon'], logging.warning(f'В соответствии с адресом: "14, Bradford Road, Upper Pells, Lewes, East Sussex, England, BN7 1RB, United Kingdom"'
+                                                                   f'с сервера получены координаты {coord}, '
+                                                                   f'не совпадает с координатами указанными в values_search.json')
 
 
 @allure.feature('Получение адреса')
@@ -58,19 +50,22 @@ def test_chek_coord(index, get_api_reverse):
     Проверяет, соответствуют ли полученные координаты адресу.
     """
 
-    response = get_api_reverse.get_reverse("-34.44076", "-58.70521")
-    try:
-        response.raise_for_status()    # Вызывает исключение, если код ответа не равен 200 (OK)
-    except HTTPError as http_err:
-        logger.error(f'HTTP error occurred: {http_err}')
+    response = get_api_reverse.get_reverse("50.8741261", "0.0006877111111111112")
+    with allure.step('Запрос отправлен, посмотрим код ответа:'):
+        try:
+            for _ in range(3):
+                response.raise_for_status()       # если ответ успешен, исключения задействованы не будут
+                logging.info(f'[{response.status_code}] - веб-сервер успешно обработал запрос')
+        except HTTPError as http_err:
+            logging.warning (f'HTTP error occurred: {http_err}')
     with open('values_reverse.json') as file:
         reverse_dict = json.load(file)
         logging.info(f'Получение данных для тестирования в формате json {reverse_dict}')
-    with allure.step("Запрос отправлен. Десериализируем ответ из json в словарь."):
+    with allure.step("Прочитаем полученный JSON и преобразуем его в объект стандартного типа данных Python"):
         response = response.text
         test_json = GetCordAddress(response)
-    with allure.step(f"Посмотрим какие координаты получены из {test_json}"):
+    with allure.step(f"Получим адрес:"):
         address = test_json.get_address()
-    assert address == reverse_dict[index]['address'], logger.error(f'В соответствии с коррдинатами: lat = -34.44076, lon = -58.70521\n'
+    assert address == reverse_dict[index]['address'], logging.warning(f'В соответствии с коррдинатами: lat = 50.8741261, lon = 0.0006877111111111112'
                                                                    f'с сервера получен адрес {address}, '
                                                                    f'не совпадает с адресом указанном в файле values_reverse.json')
