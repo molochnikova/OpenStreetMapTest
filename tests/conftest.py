@@ -12,12 +12,12 @@ class ApiClient:
     def get_search(self, q):
         url = f"{self.base_address}q={q}&format=json&addressdetails=1&limit=1"
         logging.info(f'Получен url: {url}')
-        return requests.get(url)
+        return requests.get(url, timeout=20)
 
     def get_reverse(self, lat, lon):
         url = f"{self.base_address}format=json&lat={lat}&lon={lon}"
         logging.info(f'Получен url: {url}')
-        return requests.get(url)
+        return requests.get(url, timeout=20)
 
 
 @pytest.fixture
