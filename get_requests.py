@@ -1,48 +1,34 @@
 import json
 import logging
-from requests.exceptions import HTTPError
 
 
-class GetCordAddress:
+
+
+
+# class GetDataJson:
+#     def __init__(self, file_json):
+#         self.file_json = file_json
+#
+#     def get_dict(self):
+#         with open(self.file_json) as file:
+#             search_reverse_dict = json.load(file)
+#             logging.info(f'Получение данных для тестирования в формате json {search_reverse_dict}')
+#             return search_reverse_dict
+
+
+class ApiClient:
     """
-    Отправка на сервер запроса для извлечения данных,
-    преобразование данных в json
-    и получение адреса и координат
+    Преобразование полученного адреса или координат в нужный формат url
     """
-    def __init__(self, response):
-        self.response = response
-        self.response_text = response.text
-        self.response_json = json.loads(self.response_text)
+    def __init__(self, base_address):
+        self.base_address = base_address
 
-    def send_req(self):
-        print(self.response.status_code)
-        try:
-            if self.response.status_code == 200:
-                logging.info(f'[{self.response.status_code}] - веб-сервер успешно обработал запрос')
-                return True
-            else:
-                raise Exception("Ошибка при проверки статуса сайта")
-        except Exception as e:
-            logging.error(f'[{self.response.status_code}] - веб-сервер не обработал запрос, {e}')
-            return False
+    def get_search(self, q):
+        url = f"{self.base_address}q={q}&format=json&addressdetails=1&limit=1"
+        logging.info(f'Получен url: {url}')
+        return requests.get(url, timeout=20)
 
-    def get_coord(self):
-        coord_lat = self.response_json[0]['lat']
-        coord_lon = self.response_json[0]['lon']
-        return coord_lat, coord_lon
-
-    def get_address(self):
-        return self.response_json['display_name']
-
-
-class GetDataJson:
-    def __init__(self, file_json):
-        self.file_json = file_json
-
-    def get_dict(self):
-        with open(self.file_json) as file:
-            search_reverse_dict = json.load(file)
-            logging.info(f'Получение данных для тестирования в формате json {search_reverse_dict}')
-            return search_reverse_dict
-
-
+    def get_reverse(self, lat, lon):
+        url = f"{self.base_address}format=json&lat={lat}&lon={lon}"
+        logging.info(f'Получен url: {url}')
+        return requests.get(url, timeout=20)
