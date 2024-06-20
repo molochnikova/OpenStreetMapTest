@@ -39,5 +39,6 @@ class GetCordAddress:
 
 def get_dict(file_json):
     with open(file_json) as file:
-        dickt_values = json.load(file)
-        return dickt_values
+        dict_values = json.load(file)
+        return dict_values
+
